@@ -15,10 +15,18 @@ endif()
 
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(std_msgs REQUIRED)
 
 add_executable(hello src/hello.cpp)
 ament_target_dependencies(hello rclcpp)
 install(TARGETS hello DESTINATION lib/${PROJECT_NAME})
+
+set(NODES my_publisher;my_subscriber)
+foreach(target IN LISTS NODES)
+  add_executable(${target} src/${target}.cpp)
+  ament_target_dependencies(${target} rclcpp std_msgs)
+  install(TARGETS ${target} DESTINATION lib/${PROJECT_NAME})
+endforeach()
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
