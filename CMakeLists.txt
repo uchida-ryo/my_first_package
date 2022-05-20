@@ -16,6 +16,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
 
 add_executable(hello src/hello.cpp)
 ament_target_dependencies(hello rclcpp)
@@ -27,6 +28,10 @@ foreach(target IN LISTS NODES)
   ament_target_dependencies(${target} rclcpp std_msgs)
   install(TARGETS ${target} DESTINATION lib/${PROJECT_NAME})
 endforeach()
+
+add_executable(my_turtle_controller src/my_turtle_controller.cpp)
+ament_target_dependencies(my_turtle_controller rclcpp geometry_msgs)
+install(TARGETS my_turtle_controller DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
