@@ -33,6 +33,19 @@ add_executable(my_turtle_controller src/my_turtle_controller.cpp)
 ament_target_dependencies(my_turtle_controller rclcpp geometry_msgs)
 install(TARGETS my_turtle_controller DESTINATION lib/${PROJECT_NAME})
 
+unset(NODES)
+set(NODES simple_publisher;simple_subscriber)
+foreach(target IN LISTS NODES)
+  add_executable(${target}_node src/${target}_main.cpp src/${target}.cpp)
+  ament_target_dependencies(${target}_node rclcpp std_msgs)
+  install(TARGETS ${target}_node DESTINATION lib/${PROJECT_NAME})
+  target_include_directories(${target}_node
+    PUBLIC
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+      $<INSTALL_INTERFACE:include>
+  )
+endforeach()
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   ament_lint_auto_find_test_dependencies()
